@@ -1,4 +1,5 @@
-import {cart} from '../data/carts.js'
+import {cart} from '../data/carts.js';
+import {products} from '../data/products.js';
 
 let productsHTML = '';
 
@@ -76,7 +77,7 @@ document.querySelectorAll('.js-add-to-cart')
         added.classList.remove('visible');
       }, 2000);
 
-      quantitySelector = document.querySelector(`.js-quantity-selector-${productId}`).value;
+      let quantitySelector = document.querySelector(`.js-quantity-selector-${productId}`).value;
 
       let matchingItem;
 

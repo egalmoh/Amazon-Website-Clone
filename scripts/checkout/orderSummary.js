@@ -4,6 +4,7 @@ import { formatCurrency } from '../utils/money.js';
 import { updateCartQuantity } from '../amazon.js';
 import dayjs from 'https://unpkg.com/dayjs@1.11.10/esm/index.js';
 import { deliveryOptions, getDeliveryOption } from '../../data/deliveryoptions.js';
+import { renderPaymentSummary } from './paymentSummary.js';
 
 export function renderOrderSummary() {
 
@@ -124,7 +125,11 @@ export function renderOrderSummary() {
         const container = document.querySelector(
           `.js-cart-item-container-${productId}`)
 
+
         container.remove(); 
+
+        renderPaymentSummary();
+
         let quantity_home = updateCartQuantity(); 
 
         document.querySelector('.js-home-link').innerHTML = `${quantity_home} items`;
@@ -174,6 +179,7 @@ export function renderOrderSummary() {
         const {productId, deliveryOptionId} = element.dataset
         updateDeliveryOption(productId, deliveryOptionId)
         renderOrderSummary();
+        renderPaymentSummary();
       })
     })
   }

@@ -5,6 +5,8 @@ import { updateCartQuantity } from '../amazon.js';
 import dayjs from 'https://unpkg.com/dayjs@1.11.10/esm/index.js';
 import { deliveryOptions, getDeliveryOption } from '../../data/deliveryoptions.js';
 import { renderPaymentSummary } from './paymentSummary.js';
+import { renderCheckoutHeader } from "./checkoutHeader.js";
+
 
 export function renderOrderSummary() {
 
@@ -129,10 +131,12 @@ export function renderOrderSummary() {
         container.remove(); 
 
         renderPaymentSummary();
+        renderOrderSummary();
+        renderCheckoutHeader();
 
-        let quantity_home = updateCartQuantity(); 
+        // let quantity_home = updateCartQuantity();   
 
-        document.querySelector('.js-home-link').innerHTML = `${quantity_home} items`;
+        // document.querySelector('.js-home-link').innerHTML = `${quantity_home} items`;
       });
     });
 
@@ -163,6 +167,9 @@ export function renderOrderSummary() {
         updateQuantity(productId, newQuantity);
 
         renderOrderSummary();
+        renderPaymentSummary();
+        renderCheckoutHeader();
+        
         // document.querySelector(`.js-quantity-label-${productId}`).innerHTML = newQuantity;
         
         // document.querySelector('.js-home-link')
@@ -170,8 +177,8 @@ export function renderOrderSummary() {
       })
     });
 
-  document.querySelector('.js-home-link')
-    .innerHTML = `${parseInt(updateCartQuantity())} items`;
+  // document.querySelector('.js-home-link')
+  //   .innerHTML = `${parseInt(updateCartQuantity())} items`;
 
   document.querySelectorAll('.js-delivery-option')
     .forEach((element) => {
@@ -180,6 +187,7 @@ export function renderOrderSummary() {
         updateDeliveryOption(productId, deliveryOptionId)
         renderOrderSummary();
         renderPaymentSummary();
+        renderCheckoutHeader();
       })
     })
   }

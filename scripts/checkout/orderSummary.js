@@ -6,7 +6,8 @@ import dayjs from 'https://unpkg.com/dayjs@1.11.10/esm/index.js';
 import { deliveryOptions, getDeliveryOption } from '../../data/deliveryoptions.js';
 import { renderPaymentSummary } from './paymentSummary.js';
 import { renderCheckoutHeader } from "./checkoutHeader.js";
-
+import { calculateDeliveryDate } from '../../data/deliveryoptions.js';
+import isWeekend from '../utils/isWeekend.js';
 
 export function renderOrderSummary() {
 
@@ -20,9 +21,7 @@ export function renderOrderSummary() {
 
     const deliveryOption = getDeliveryOption(deliveryOptionId);
 
-    const today = dayjs();
-    const deliveryDate = today.add(deliveryOption.deliveryDays, 'days');
-    const dateString = deliveryDate.format('dddd, MMMM D');
+    const dateString = calculateDeliveryDate(deliveryOption);
 
     cartSummaryHTML += `
       <div class="cart-item-container 
@@ -79,12 +78,7 @@ export function renderOrderSummary() {
     let html = '';
 
     deliveryOptions.forEach((deliveryOption) => {
-      const today = dayjs();
-      const deliveryDate = today.add(
-        deliveryOption.deliveryDays, 
-        'days'
-      );
-      const dateString = deliveryDate.format('dddd, MMMM D');
+      const dateString = calculateDeliveryDate(deliveryOption);
 
       const priceString = deliveryOption.priceCents === 0 
         ? 'FREE' 
@@ -92,7 +86,17 @@ export function renderOrderSummary() {
 
       const isChecked = deliveryOption.id === cartItem.deliveryOptionId;
 
-      html += `
+      const noDeliveryDays = dayjs().add(0, 'days').format('dddd');
+      console.log(noDeliveryDays)
+      // this code needs the real logical operator to make it false if one of them is the date.
+      if (!isWeekend(noDeliveryDays)){
+        html += `
+        <div class="delivery-option js-delivery-option">
+          No delivery on Saturday & Sunday
+        </div>
+      `
+      } else {
+        html += `
         <div class="delivery-option js-delivery-option"
           data-product-id="${matchingProduct.id}"
           data-delivery-option-id="${deliveryOption.id}">
@@ -110,6 +114,7 @@ export function renderOrderSummary() {
           </div>
         </div>
       `
+      }
     });
 
     return html;

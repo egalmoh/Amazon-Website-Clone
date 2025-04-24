@@ -82,6 +82,7 @@ document.addEventListener('DOMContentLoaded', () => {
         let added = document.querySelector(`.js-added-item-${productId}`);
         
         let quantitySelector = document.querySelector(`.js-quantity-selector-${productId}`).value;
+        console.log(quantitySelector)
 
         addedItem(added);
         addToCart(productId, quantitySelector);

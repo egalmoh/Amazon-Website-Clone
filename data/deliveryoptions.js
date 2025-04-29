@@ -33,5 +33,5 @@ export function calculateDeliveryDate(deliveryOption) {
       const deliveryDate = today.add(deliveryOption.deliveryDays, 'days');
       const dateString = deliveryDate.format('dddd, MMMM D');
 
-      return dateString;
+      return dateString || 'Friday, December 22';
 }

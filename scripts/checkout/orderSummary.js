@@ -10,8 +10,8 @@ import { calculateDeliveryDate } from '../../data/deliveryoptions.js';
 import isWeekend from '../utils/isWeekend.js';
 
 export function renderOrderSummary() {
-
   let cartSummaryHTML = '';
+  
   cart.forEach((cartItem) => {
     const productId = cartItem.productId;
 
@@ -25,6 +25,7 @@ export function renderOrderSummary() {
 
     cartSummaryHTML += `
       <div class="cart-item-container 
+      js-cart-item-container
       js-cart-item-container-${matchingProduct.id}">
         <div class="delivery-date">
           Delivery date: ${dateString}
@@ -41,7 +42,8 @@ export function renderOrderSummary() {
             <div class="product-price">
               $${formatCurrency(matchingProduct.priceCents)}
             </div>
-            <div class="product-quantity">
+            <div class="product-quantity
+              js-product-quantity-${matchingProduct.id}">
               <span>
                 Quantity: <span class="quantity-label 
                 js-quantity-label-${matchingProduct.id}">${cartItem.quantity}</span>
@@ -55,8 +57,9 @@ export function renderOrderSummary() {
               data-product-id="${matchingProduct.id}">
                 save
               </span>
-              <span class="delete-quantity-link link-primary js-delete-link" 
-              data-product-id="${matchingProduct.id}">
+              <span class="delete-quantity-link link-primary js-delete-link
+                js-delete-link-${matchingProduct.id}" 
+                data-product-id="${matchingProduct.id}">
                 Delete
               </span>
             </div>
@@ -86,7 +89,7 @@ export function renderOrderSummary() {
 
       const isChecked = deliveryOption.id === cartItem.deliveryOptionId;
 
-      const noDeliveryDays = dayjs().add(0, 'days').format('dddd');
+      const noDeliveryDays = dayjs().add(0, 'days').format('dddd') || 'Friday, December 22';
       console.log(noDeliveryDays)
       // this code needs the real logical operator to make it false if one of them is the date.
       if (!isWeekend(noDeliveryDays)){

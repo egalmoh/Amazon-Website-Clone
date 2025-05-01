@@ -2,7 +2,7 @@ import {cart, removeFromCart, updateQuantity, updateDeliveryOption} from '../../
 import {products, getProduct} from '../../data/products.js';
 import { formatCurrency } from '../utils/money.js';
 import { updateCartQuantity } from '../amazon.js';
-import dayjs from 'https://unpkg.com/dayjs@1.11.10/esm/index.js';
+import dayjs from '../../libs/index.js';
 import { deliveryOptions, getDeliveryOption } from '../../data/deliveryoptions.js';
 import { renderPaymentSummary } from './paymentSummary.js';
 import { renderCheckoutHeader } from "./checkoutHeader.js";
@@ -90,7 +90,7 @@ export function renderOrderSummary() {
       const isChecked = deliveryOption.id === cartItem.deliveryOptionId;
 
       const noDeliveryDays = dayjs().add(0, 'days').format('dddd') || 'Friday, December 22';
-      console.log(noDeliveryDays)
+      // console.log(noDeliveryDays)
       // this code needs the real logical operator to make it false if one of them is the date.
       if (!isWeekend(noDeliveryDays)){
         html += `

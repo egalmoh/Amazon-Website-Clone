@@ -1,6 +1,5 @@
-import {renderOrderSummary} from '../../scripts/checkout/orderSummary.js';
-import {loadFromStorage} from "../../data/carts.js";
-
+import { renderOrderSummary } from "../../scripts/checkout/orderSummary.js";
+import { loadFromStorage, cart } from "../../data/carts.js";
 
 describe('test suite: renderOrderSummary', () => {
 
@@ -13,6 +12,7 @@ describe('test suite: renderOrderSummary', () => {
     document.querySelector('.js-test-container').innerHTML = `
       <div class="js-order-summary"></div>
       <div class="js-payment-summary"></div>
+      <div class="js-checkout-header"></div>
     `;
 
     spyOn(localStorage, 'getItem').and.callFake(() => {
@@ -26,42 +26,44 @@ describe('test suite: renderOrderSummary', () => {
         deliveryOptionId: '2'
       }]);
     });
-    loadFromStorage(); 
+    loadFromStorage();
 
     renderOrderSummary();
   });
 
   afterEach(() => {
-    document.querySelector('.js-test-container').innerHTML = ''; 
+    document.querySelector('.js-test-container').innerHTML = '';
   });
 
   it('displays the cart', () => {
 
     expect(
-      document.querySelectorAll('js-cart-item-container').length
-    ).toEqual(2)
+      document.querySelectorAll('.js-cart-item-container').length
+    ).toEqual(2);
 
     expect(
-      document.querySelector(`.js-product-quantity-${productId1}`).innerHTML
-    ).toContain('Quantity: 2'); 
-
+      document.querySelector(`.js-product-quantity-${productId1}`).innerText
+    ).toContain('Quantity: 2')
     expect(
-      document.querySelector(`.js-product-quantity-${productId2}`).innerHTML
-    ).toContain('Quantity: 1'); 
-
+      document.querySelector(`.js-product-quantity-${productId2}`).innerText
+    ).toContain('Quantity: 1')
   });
 
   it('removes a product', () => {
-    
+
     document.querySelector(`.js-delete-link-${productId1}`).click();
-    
+
     expect(
-      document.querySelectorAll('js-cart-item-container').length
-    ).toEqual(1)
+      document.querySelectorAll('.js-cart-item-container').length
+    ).toEqual(1);
 
     expect(
       document.querySelector(`.js-cart-item-container-${productId1}`)
-    ).not.toEqual(null)
+    ).toEqual(null);
+
+    expect(
+      document.querySelector(`.js-cart-item-container-${productId2}`)
+    ).not.toEqual(null);
 
     expect(cart.length).toEqual(1);
     expect(cart[0].productId).toEqual(productId2)

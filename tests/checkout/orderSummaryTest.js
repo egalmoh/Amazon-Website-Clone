@@ -19,7 +19,7 @@ describe('test suite: renderOrderSummary', () => {
       return JSON.stringify([{
         productId: productId1,
         quantity: 2,
-        deliveryOptionId: '1'
+        deliveryOptionId: '3'
       }, {
         productId: productId2,
         quantity: 1,
@@ -67,5 +67,18 @@ describe('test suite: renderOrderSummary', () => {
 
     expect(cart.length).toEqual(1);
     expect(cart[0].productId).toEqual(productId2)
+  });
+
+  it('Updating delivery option', () => {
+    document.querySelector(`.js-delivery-option-id-${cart[0].deliveryOptionId}`).click();
+
+    expect(document.querySelector(`.js-delivery-option-input-id-${cart[0].deliveryOptionId}`).value).toEqual('on')
+
+    expect(cart.length).toEqual(2)
+    expect(cart[0].deliveryOptionId).toEqual('3')
+    console.log(cart)
+
+    expect(document.querySelector('.js-shipping-price').innerText).toEqual('$14.98')
+    expect(document.querySelector('.js-total-price').innerText).toEqual('$63.50')
   });
 });

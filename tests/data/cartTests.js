@@ -58,4 +58,4 @@ describe('test suite: addToCart', () => {
     expect(cart.length).not.toEqual(2);
     expect(localStorage.setItem).toHaveBeenCalledTimes(2);
    });
-})
+});

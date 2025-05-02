@@ -76,7 +76,6 @@ describe('test suite: renderOrderSummary', () => {
 
     expect(cart.length).toEqual(2)
     expect(cart[0].deliveryOptionId).toEqual('3')
-    console.log(cart)
 
     expect(document.querySelector('.js-shipping-price').innerText).toEqual('$14.98')
     expect(document.querySelector('.js-total-price').innerText).toEqual('$63.50')

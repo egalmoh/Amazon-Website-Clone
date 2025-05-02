@@ -14,7 +14,8 @@ document.addEventListener('DOMContentLoaded', () => {
             src="${product.image}">
         </div>
 
-        <div class="product-name limit-text-to-2-lines">
+        <div class="product-name limit-text-to-2-lines"
+          title="${product.name}">
           ${product.name}
         </div>
 

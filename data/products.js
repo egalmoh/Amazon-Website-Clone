@@ -78,7 +78,7 @@ console.log(date.toLocaleTimeString())
 export let products = [];
 
 export function loadProductsFetch() {
-  fetch('https://supersimplebackend.dev/products').then((response) => {
+  const promise = fetch('https://supersimplebackend.dev/products').then((response) => {
     return response.json();
   }).then((productsData) => {
     products = productsData.map((productDetails) => {
@@ -89,9 +89,14 @@ export function loadProductsFetch() {
       }
       return new Product(productDetails);
     });
-  })
+
+    console.log('load promises')
+  }).catch((error) => {
+    console.log('Unexpected error. Please try again later.')
+  });
+
+  return promise;
 }
-loadProductsFetch();
 
 export function loadProducts(fun) {
   const xhr = new XMLHttpRequest();
@@ -107,6 +112,10 @@ export function loadProducts(fun) {
     });
 
     fun();
+  });
+
+  xhr.addEventListener('error', (error) => {
+    console.log('Unexpected error. Please try again later.')
   });
 
   xhr.open('GET', 'https://supersimplebackend.dev/products');

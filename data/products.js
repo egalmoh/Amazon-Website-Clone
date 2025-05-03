@@ -75,6 +75,31 @@ const date = new Date();
 console.log(date.toLocaleTimeString())
 */
 
+export let products = [];
+
+export function loadProducts(renderProductsGrid) {
+  const xhr = new XMLHttpRequest();
+
+  xhr.addEventListener('load', () => {
+    products = JSON.parse(xhr.response).map((productDetails) => {
+      if (productDetails.type === 'clothing') {
+        return new Clothing(productDetails);
+      } else if (productDetails.type === 'appliances') {
+        return new Appliance(productDetails);
+      }
+      return new Product(productDetails);
+    });
+
+    renderProductsGrid();
+  });
+
+  xhr.open('GET', 'https://supersimplebackend.dev/products');
+  xhr.send();
+
+}
+loadProducts();
+
+/*
 export const products = [
   {
     id: "e43638ce-6aa0-4b85-b27f-e1d07eb678c6",
@@ -699,3 +724,4 @@ export const products = [
   }
   return new Product(productDetails);
 });
+*/

@@ -77,6 +77,22 @@ console.log(date.toLocaleTimeString())
 
 export let products = [];
 
+export function loadProductsFetch() {
+  fetch('https://supersimplebackend.dev/products').then((response) => {
+    return response.json();
+  }).then((productsData) => {
+    products = productsData.map((productDetails) => {
+      if (productDetails.type === 'clothing') {
+        return new Clothing(productDetails);
+      } else if (productDetails.type === 'appliances') {
+        return new Appliance(productDetails);
+      }
+      return new Product(productDetails);
+    });
+  })
+}
+loadProductsFetch();
+
 export function loadProducts(fun) {
   const xhr = new XMLHttpRequest();
 

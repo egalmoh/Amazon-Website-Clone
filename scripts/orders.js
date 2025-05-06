@@ -1,5 +1,7 @@
 import { formatCurrency } from "./utils/money.js";
 import { getProduct, loadProductsFetch } from "../data/products.js";
+import { updateCartQuantity } from "./amazon.js";
+import { cart } from "../data/cart-class.js";
 
 export const orders = JSON.parse(localStorage.getItem('orders')) || [];
 
@@ -12,7 +14,6 @@ function saveToStorage() {
   localStorage.setItem('orders', JSON.stringify(orders));
 }
 
-console.log(orders[0])
 
 let orderSummaryHTML = '';
 
@@ -52,7 +53,7 @@ async function renderOrders() {
     `
   });
 
-    document.querySelector('.js-orders-grid').innerHTML = orderSummaryHTML;
+  document.querySelector('.js-orders-grid').innerHTML = orderSummaryHTML;
 }
 
 
@@ -64,17 +65,13 @@ function productsInOrder(orderItem) {
 
     const orderDate = new Date(productItem.estimatedDeliveryTime);
     const readableDate = orderDate.toLocaleDateString('en-US', { month: 'long', day: 'numeric'});
-    console.log(productItem.estimatedDeliveryTime)
 
     const matchingProduct = getProduct(productItem.productId)
     if (!matchingProduct) {
       console.error(`Product with ID ${productItem.productId} not found.`);
-      return; // Skip this product
+      return;
     }
 
-    console.log(productItem.quantity)
-    console.log(orderItem.id + ' order id');
-    console.log(matchingProduct.id + ' product id')
     productHTML += `
       <div class="product-image-container">
         <img src="${matchingProduct.image}">
@@ -90,7 +87,8 @@ function productsInOrder(orderItem) {
         <div class="product-quantity">
           Quantity: ${productItem.quantity}
         </div>
-        <button class="buy-again-button button-primary js-buy-again">
+        <button class="buy-again-button button-primary js-buy-again"
+          data-product-id="${matchingProduct.id}">
           <img class="buy-again-icon" src="images/icons/buy-again.png">
           <span class="buy-again-message">Buy it again</span>
         </button>
@@ -106,10 +104,31 @@ function productsInOrder(orderItem) {
     `
   });
   return productHTML;
-  // document.querySelector('.js-order-details-grid').innerHTML = productHTML;
-
 };
 
-document.addEventListener('DOMContentLoaded', () => {
-  renderOrders();
+document.addEventListener('DOMContentLoaded', async () => {
+  await renderOrders();
+
+  document.querySelector('.js-cart-quantity').innerHTML = updateCartQuantity();
+
+  document.querySelector('.js-cart-quantity').innerHTML = updateCartQuantity();
+
+  // Use event delegation for "Buy it again" buttons
+  document.querySelector('.js-orders-grid').addEventListener('click', (event) => {
+    const buyAgainButton = event.target.closest('.js-buy-again');
+    if (buyAgainButton) {
+      const productId = buyAgainButton.dataset.productId;
+      const quantity = parseInt(buyAgainButton.closest('.product-details').querySelector('.product-quantity').textContent.replace('Quantity: ', ''), 10);
+
+      // Add the product to the cart
+      console.log(productId)
+      cart.addToCart(productId, quantity);
+
+      // Update the cart quantity display
+      document.querySelector('.js-cart-quantity').innerHTML = updateCartQuantity();
+
+      console.log(`Added product with ID ${productId} and quantity ${quantity} to the cart.`);
+    }
+  });
+
 });

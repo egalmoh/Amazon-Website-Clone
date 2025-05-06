@@ -1,5 +1,6 @@
 import { getProduct, loadProductsFetch} from '../data/products.js';
 import { cart } from '../data/cart-class.js';
+import { updateCartQuantity } from './amazon.js';
 
 const url = new URL(window.location.href);
 console.log(url.searchParams.get('orderId'));
@@ -71,19 +72,6 @@ async function renderOrders() {
 
 document.addEventListener('DOMContentLoaded', () => {
   renderOrders();
+
+  document.querySelector('.js-cart-quantity').innerHTML = updateCartQuantity();
 });
-
-
-// function getCartProduct(productId) {
-//   let matchingCartProduct;
-//   cart.cartItems.forEach(product => {
-//     if (productId === product.productId) {
-//       matchingCartProduct = product;
-//       console.log(product)
-//     }
-//   });
-
-//   console.log(cart.cartItems)
-
-//   return matchingCartProduct;
-// }

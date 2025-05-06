@@ -1,5 +1,5 @@
-import { formatCurrency } from "../scripts/utils/money.js";
-import { getProduct, loadProductsFetch } from "./products.js";
+import { formatCurrency } from "./utils/money.js";
+import { getProduct, loadProductsFetch } from "../data/products.js";
 
 export const orders = JSON.parse(localStorage.getItem('orders')) || [];
 
@@ -64,6 +64,7 @@ function productsInOrder(orderItem) {
 
     const orderDate = new Date(productItem.estimatedDeliveryTime);
     const readableDate = orderDate.toLocaleDateString('en-US', { month: 'long', day: 'numeric'});
+    console.log(productItem.estimatedDeliveryTime)
 
     const matchingProduct = getProduct(productItem.productId)
     if (!matchingProduct) {
@@ -71,6 +72,9 @@ function productsInOrder(orderItem) {
       return; // Skip this product
     }
 
+    console.log(productItem.quantity)
+    console.log(orderItem.id + ' order id');
+    console.log(matchingProduct.id + ' product id')
     productHTML += `
       <div class="product-image-container">
         <img src="${matchingProduct.image}">
@@ -93,7 +97,7 @@ function productsInOrder(orderItem) {
       </div>
 
       <div class="product-actions">
-        <a href="tracking.html">
+        <a href="tracking.html?orderId=${orderItem.id}&productId=${matchingProduct.id}&deliveryTime=${productItem.estimatedDeliveryTime}&quantity=${productItem.quantity}">
           <button class="track-package-button button-secondary">
             Track package
           </button>

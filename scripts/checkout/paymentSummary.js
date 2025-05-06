@@ -4,7 +4,7 @@ import { getProduct } from '../../data/products.js';
 import { getDeliveryOption } from '../../data/deliveryoptions.js';
 import { formatCurrency } from '../utils/money.js';
 import { updateCartQuantity } from '../amazon.js';
-import { addOrder } from '../../data/orders.js';
+import { addOrder } from '../orders.js';
 
 export function renderPaymentSummary() {
   let productPriceCents = 0;

@@ -66,9 +66,13 @@ console.log(date.toLocaleTimeString())
 export let products = [];
 
 export function loadProductsFetch() {
-  const promise = fetch('https://supersimplebackend.dev/products').then((response) => {
-    return response.json();
-  }).then((productsData) => {
+  const promise = fetch('https://supersimplebackend.dev/products')
+    .then((response) => {
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      return response.json()})
+    .then((productsData) => {
     products = productsData.map((productDetails) => {
       if (productDetails.type === 'clothing') {
         return new Clothing(productDetails);
